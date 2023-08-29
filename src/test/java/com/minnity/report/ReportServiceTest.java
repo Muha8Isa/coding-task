@@ -48,13 +48,17 @@ public class ReportServiceTest {
   public void findRequestsWithErrorTest() {
     reportService = new ReportService();
     Map<Integer, RequestLog> test = reportService.findRequestsWithError(requestLogs);
-    for (RequestLog reqLog : requestLogs) {
-      int id = reqLog.getCompanyId();
-      if (reqLog.getRequestStatus() >= 400) {
-        assertTrue(test.containsKey(id));
-        System.out.println("Company id: " + id + " request: " + reqLog.getRequestStatus() + ": has error: " + reqLog);
-      } else System.out.println("Company id: " + id + " request: " + reqLog.getRequestStatus() + ": has no error");
-    }
+    requestLogs.stream()
+            .filter(n -> n.getRequestStatus() >= 400)
+            .forEach(n -> {
+              System.out.println(n.getCompanyId() + " " + n.getRequestStatus() + " " + "Has errors");
+              assertTrue(test.containsKey(n.getCompanyId()));
+            });
+    requestLogs.stream()
+            .filter(n -> n.getRequestStatus() < 400)
+            .forEach(n -> {
+              System.out.println(n.getCompanyId() + " " + n.getRequestStatus() + " " + "Does not have errors");
+            });
   }
 
   @Test

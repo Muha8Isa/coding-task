@@ -23,13 +23,10 @@ public class ReportService {
   //task 2: Count and return requests per company that finished with an error HTTP response code (>=400)
   public Map<Integer, RequestLog> findRequestsWithError(List<RequestLog> requestLogs) {
     // throw new NotImplementedException("TODO implement this method");
-
     Map<Integer, RequestLog> numberOfErrors = new HashMap<>();
-
-    for (RequestLog reqLog : requestLogs) {
-      int id = reqLog.getCompanyId();
-      if (reqLog.getRequestStatus() >= 400) numberOfErrors.put(id, reqLog);
-    }
+    requestLogs.stream()
+            .filter(n -> n.getRequestStatus() >= 400)
+            .forEach(n -> numberOfErrors.put(n.getCompanyId(), n));
     return numberOfErrors;
   }
 
